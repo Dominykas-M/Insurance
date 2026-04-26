@@ -9,6 +9,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'lt'])) {
+        session(['locale' => $locale]);
+        session()->save();
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
+Route::get('debug-locale', function () {
+    return [
+        'session_locale' => session('locale'),
+        'app_locale' => app()->getLocale(),
+    ];
+});
+
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');

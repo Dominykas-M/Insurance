@@ -138,34 +138,43 @@
                 <ul class="navbar-nav me-auto">
                     @auth
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('owners.index') }}">Owners</a>
+                            <a class="nav-link" href="{{ route('owners.index') }}">{{ __('messages.owners') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cars.index') }}">Cars</a>
+                            <a class="nav-link" href="{{ route('cars.index') }}">{{ __('messages.cars') }}</a>
                         </li>
                     @endauth
+                </ul>
+
+                <ul class="navbar-nav me-2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('lang.switch', 'en') }}">🇬🇧 EN</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('lang.switch', 'lt') }}">🇱🇹 LT</a>
+                    </li>
                 </ul>
 
                 <ul class="navbar-nav ms-auto">
                     @guest
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">Login</a>
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('messages.login') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">Register</a>
+                            <a class="nav-link" href="{{ route('register') }}">{{ __('messages.register') }}</a>
                         </li>
                     @else
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                 👤 {{ Auth::user()->name }}
                                 <span style="font-size:0.7rem; background:#e94560; padding:2px 8px; border-radius:20px; margin-left:5px;">
-                                        {{ Auth::user()->role }}
-                                    </span>
+                                    {{ Auth::user()->role }}
+                                </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    Logout
+                                    {{ __('messages.logout') }}
                                 </a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
