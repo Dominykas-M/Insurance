@@ -9,17 +9,26 @@
                     <div class="card-body p-4">
                         <form action="{{ route('cars.store') }}" method="POST">
                             @csrf
+                            @if($errors->any())
+                                <div class="alert alert-danger" style="background: linear-gradient(135deg, #e74c3c, #c0392b); border:none; border-radius:12px; color:white; padding:1rem 1.5rem; margin-bottom:1rem;">
+                                    <ul class="mb-0">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">{{ __('messages.reg_number') }}</label>
-                                <input type="text" name="reg_number" class="form-control" placeholder="e.g. ABC123">
+                                <input type="text" name="reg_number" class="form-control" placeholder="e.g. ABC123" value="{{ old('reg_number') }}">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">{{ __('messages.brand') }}</label>
-                                <input type="text" name="brand" class="form-control" placeholder="e.g. Toyota">
+                                <input type="text" name="brand" class="form-control" placeholder="e.g. Toyota" value="{{ old('brand') }}">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">{{ __('messages.model') }}</label>
-                                <input type="text" name="model" class="form-control" placeholder="e.g. Corolla">
+                                <input type="text" name="model" class="form-control" placeholder="e.g. Corolla" value="{{ old('model') }}">
                             </div>
                             <div class="mb-4">
                                 <label class="form-label fw-semibold">{{ __('messages.owner') }}</label>

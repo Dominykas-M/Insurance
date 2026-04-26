@@ -1,0 +1,29 @@
+<?php
+
+return [
+    'reg_number_required' => 'Valstybinis numeris yra privalomas.',
+    'reg_number_regex' => 'Valstybinis numeris turi būti sudarytas tik iš didžiųjų raidžių ir skaičių (pvz. ABC123).',
+    'reg_number_unique' => 'Šis valstybinis numeris jau užregistruotas.',
+    'reg_number_min' => 'Valstybinis numeris turi būti bent 2 simbolių.',
+    'reg_number_max' => 'Valstybinis numeris negali viršyti 10 simbolių.',
+    'brand_required' => 'Automobilio markė yra privaloma.',
+    'brand_min' => 'Automobilio markė turi būti bent 2 simbolių.',
+    'model_required' => 'Automobilio modelis yra privalomas.',
+    'owner_required' => 'Pasirinkite savininką.',
+    'car_added' => 'Automobilis sėkmingai pridėtas.',
+    'car_updated' => 'Automobilis sėkmingai atnaujintas.',
+
+    'name_required' => 'Vardas yra privalomas.',
+    'name_min' => 'Vardas turi būti bent 2 simbolių.',
+    'surname_required' => 'Pavardė yra privaloma.',
+    'surname_min' => 'Pavardė turi būti bent 2 simbolių.',
+    'phone_required' => 'Telefono numeris yra privalomas.',
+    'phone_regex' => 'Telefono numeris turi būti teisingas (pvz. +1234567890).',
+    'email_required' => 'El. paštas yra privalomas.',
+    'email_invalid' => 'Įveskite teisingą el. pašto adresą.',
+    'email_unique' => 'Šis el. paštas jau užregistruotas.',
+    'address_required' => 'Adresas yra privalomas.',
+    'address_min' => 'Adresas turi būti bent 5 simbolių.',
+    'owner_added' => 'Savininkas sėkmingai pridėtas.',
+    'owner_updated' => 'Savininkas sėkmingai atnaujintas.',
+];

@@ -10,17 +10,26 @@
                         <form action="{{ route('cars.update', $car->id) }}" method="POST">
                             @csrf
                             @method('PUT')
+                            @if($errors->any())
+                                <div class="alert alert-danger" style="background: linear-gradient(135deg, #e74c3c, #c0392b); border:none; border-radius:12px; color:white; padding:1rem 1.5rem; margin-bottom:1rem;">
+                                    <ul class="mb-0">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">{{ __('messages.reg_number') }}</label>
-                                <input type="text" name="reg_number" class="form-control" value="{{ $car->reg_number }}">
+                                <input type="text" name="reg_number" class="form-control" value="{{ old('reg_number', $car->reg_number) }}">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">{{ __('messages.brand') }}</label>
-                                <input type="text" name="brand" class="form-control" value="{{ $car->brand }}">
+                                <input type="text" name="brand" class="form-control" value="{{ old('brand', $car->brand) }}">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">{{ __('messages.model') }}</label>
-                                <input type="text" name="model" class="form-control" value="{{ $car->model }}">
+                                <input type="text" name="model" class="form-control" value="{{ old('model', $car->model) }}">
                             </div>
                             <div class="mb-4">
                                 <label class="form-label fw-semibold">{{ __('messages.owner') }}</label>

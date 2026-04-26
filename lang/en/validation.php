@@ -1,0 +1,28 @@
+<?php
+return [
+    'reg_number_required' => 'License plate number is required.',
+    'reg_number_regex' => 'License plate must contain only uppercase letters and numbers (e.g. ABC123).',
+    'reg_number_unique' => 'This license plate is already registered.',
+    'reg_number_min' => 'License plate must be at least 2 characters.',
+    'reg_number_max' => 'License plate cannot exceed 10 characters.',
+    'brand_required' => 'Car brand is required.',
+    'brand_min' => 'Car brand must be at least 2 characters.',
+    'model_required' => 'Car model is required.',
+    'owner_required' => 'Please select an owner.',
+    'car_added' => 'Car added successfully.',
+    'car_updated' => 'Car updated successfully.',
+
+    'name_required' => 'First name is required.',
+    'name_min' => 'First name must be at least 2 characters.',
+    'surname_required' => 'Last name is required.',
+    'surname_min' => 'Last name must be at least 2 characters.',
+    'phone_required' => 'Phone number is required.',
+    'phone_regex' => 'Phone number must be valid (e.g. +1234567890).',
+    'email_required' => 'Email is required.',
+    'email_invalid' => 'Please enter a valid email address.',
+    'email_unique' => 'This email is already registered.',
+    'address_required' => 'Address is required.',
+    'address_min' => 'Address must be at least 5 characters.',
+    'owner_added' => 'Owner added successfully.',
+    'owner_updated' => 'Owner updated successfully.',
+];
