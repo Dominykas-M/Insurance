@@ -9,17 +9,28 @@ class OwnerController extends Controller
 {
     public function index()
     {
-        $owners = Owner::all();
+        $this->authorize('viewAny', Owner::class);
+
+        $user = auth()->user();
+        if ($user->isAdmin() || $user->isViewer()) {
+            $owners = Owner::all();                               // admin + read-only mato visus
+        } else {
+            $owners = Owner::where('user_id', $user->id)->get();  // paprastas vartotojas – tik savo
+        }
+
         return view('owners.index', compact('owners'));
     }
 
     public function create()
     {
+        $this->authorize('create', Owner::class);
         return view('owners.create');
     }
 
     public function store(Request $request)
     {
+        $this->authorize('create', Owner::class);
+
         $request->validate([
             'name' => 'required|string|min:2|max:50',
             'surname' => 'required|string|min:2|max:50',
@@ -40,17 +51,24 @@ class OwnerController extends Controller
             'address.min' => __('validation.address_min'),
         ]);
 
-        Owner::create($request->all());
+        // Naujas savininkas priklauso prisijungusiam vartotojui
+        $data = $request->only(['name', 'surname', 'phone', 'email', 'address']);
+        $data['user_id'] = auth()->id();
+        Owner::create($data);
+
         return redirect()->route('owners.index')->with('success', __('validation.owner_added'));
     }
 
     public function edit(Owner $owner)
     {
+        $this->authorize('update', $owner);
         return view('owners.edit', compact('owner'));
     }
 
     public function update(Request $request, Owner $owner)
     {
+        $this->authorize('update', $owner);
+
         $request->validate([
             'name' => 'required|string|min:2|max:50',
             'surname' => 'required|string|min:2|max:50',
@@ -71,12 +89,16 @@ class OwnerController extends Controller
             'address.min' => __('validation.address_min'),
         ]);
 
-        $owner->update($request->all());
+        // Atnaujinam tik leistinus laukus – user_id (savininkystė) nekeičiamas
+        $owner->update($request->only(['name', 'surname', 'phone', 'email', 'address']));
+
         return redirect()->route('owners.index')->with('success', __('validation.owner_updated'));
     }
 
     public function destroy(Owner $owner)
     {
+        $this->authorize('delete', $owner);
+
         $owner->delete();
         return redirect()->route('owners.index')->with('success', 'Owner deleted!');
     }

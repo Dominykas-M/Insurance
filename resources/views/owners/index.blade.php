@@ -5,9 +5,9 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span>👤 {{ __('messages.owners_registry') }}</span>
-                @if(auth()->user()->role === 'editor')
+                @can('create', App\Models\Owner::class)
                     <a href="{{ route('owners.create') }}" class="btn btn-primary btn-sm">+ {{ __('messages.add_owner') }}</a>
-                @endif
+                @endcan
             </div>
             <div class="card-body p-0">
                 @if(session('success'))
@@ -22,9 +22,7 @@
                         <th>{{ __('messages.phone') }}</th>
                         <th>{{ __('messages.email') }}</th>
                         <th>{{ __('messages.address') }}</th>
-                        @if(auth()->user()->role === 'editor')
-                            <th>{{ __('messages.actions') }}</th>
-                        @endif
+                        <th>{{ __('messages.actions') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -36,16 +34,18 @@
                             <td>{{ $owner->phone }}</td>
                             <td>{{ $owner->email }}</td>
                             <td>{{ $owner->address }}</td>
-                            @if(auth()->user()->role === 'editor')
-                                <td>
+                            <td>
+                                @can('update', $owner)
                                     <a href="{{ route('owners.edit', $owner->id) }}" class="btn btn-warning btn-sm">{{ __('messages.edit') }}</a>
-                                    <form action="{{ route('owners.destroy', $owner->id) }}" method="POST" style="display:inline">
+                                @endcan
+                                @can('delete', $owner)
+                                    <form action="{{ route('owners.destroy', $owner->id) }}" method="POST" style="display:inline" onsubmit="return confirm('Ar tikrai?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">{{ __('messages.delete') }}</button>
                                     </form>
-                                </td>
-                            @endif
+                                @endcan
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>

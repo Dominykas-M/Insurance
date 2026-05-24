@@ -12,18 +12,32 @@ class CarController extends Controller
 {
     public function index()
     {
-        $cars = Car::with('owner')->get();
+        $this->authorize('viewAny', Car::class);
+
+        $user = auth()->user();
+        $query = Car::with('owner');
+
+        // Regular user sees only cars belonging to their own owners.
+        // Admin and viewer (read-only) see all cars.
+        if (!$user->isAdmin() && !$user->isViewer()) {
+            $query->whereHas('owner', fn ($q) => $q->where('user_id', $user->id));
+        }
+
+        $cars = $query->get();
         return view('cars.index', compact('cars'));
     }
 
     public function create()
     {
-        $owners = Owner::all();
+        $this->authorize('create', Car::class);
+        $owners = $this->availableOwners();
         return view('cars.create', compact('owners'));
     }
 
     public function store(Request $request)
     {
+        $this->authorize('create', Car::class);
+
         $request->validate([
             'reg_number' => 'required|string|min:2|max:10|unique:cars,reg_number|regex:/^[A-Z0-9]{2,8}$/',
             'brand'      => 'required|string|min:2|max:50',
@@ -44,6 +58,8 @@ class CarController extends Controller
             'photos.*.max'        => __('validation.photo_max'),
         ]);
 
+        $this->guardOwner($request->owner_id);
+
         $car = Car::create($request->only(['reg_number', 'brand', 'model', 'owner_id']));
 
         if ($request->hasFile('photos')) {
@@ -58,12 +74,15 @@ class CarController extends Controller
 
     public function edit(Car $car)
     {
-        $owners = Owner::all();
+        $this->authorize('update', $car);
+        $owners = $this->availableOwners();
         return view('cars.edit', compact('car', 'owners'));
     }
 
     public function update(Request $request, Car $car)
     {
+        $this->authorize('update', $car);
+
         $request->validate([
             'reg_number' => 'required|string|min:2|max:10|unique:cars,reg_number,'.$car->id.'|regex:/^[A-Z0-9]{2,8}$/',
             'brand'      => 'required|string|min:2|max:50',
@@ -84,6 +103,8 @@ class CarController extends Controller
             'photos.*.max'        => __('validation.photo_max'),
         ]);
 
+        $this->guardOwner($request->owner_id);
+
         $car->update($request->only(['reg_number', 'brand', 'model', 'owner_id']));
 
         if ($request->hasFile('photos')) {
@@ -98,6 +119,8 @@ class CarController extends Controller
 
     public function deletePhoto(CarPhoto $photo)
     {
+        $this->authorize('update', $photo->car);
+
         Storage::disk('public')->delete($photo->path);
         $photo->delete();
 
@@ -106,12 +129,32 @@ class CarController extends Controller
 
     public function destroy(Car $car)
     {
-        
+        $this->authorize('delete', $car);
+
         foreach ($car->photos as $photo) {
             Storage::disk('public')->delete($photo->path);
         }
 
         $car->delete();
         return redirect()->route('cars.index')->with('success', 'Car deleted successfully');
+    }
+
+    // Owners the current user is allowed to assign cars to
+    private function availableOwners()
+    {
+        $user = auth()->user();
+        return $user->isAdmin()
+            ? Owner::all()
+            : Owner::where('user_id', $user->id)->get();
+    }
+
+    // Stops a non-admin from assigning a car to someone else's owner
+    private function guardOwner($ownerId): void
+    {
+        $user = auth()->user();
+        if (!$user->isAdmin()) {
+            $owner = Owner::findOrFail($ownerId);
+            abort_unless($owner->user_id === $user->id, 403);
+        }
     }
 }

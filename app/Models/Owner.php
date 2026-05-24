@@ -7,14 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Owner extends Model
 {
     protected $fillable = [
+        'user_id',
         'name',
         'surname',
         'phone',
         'email',
         'address',
     ];
-    public function cars()
+
+    public function user()
     {
-        return $this->hasMany(Car::class);
+        return $this->belongsTo(User::class);
     }
 }

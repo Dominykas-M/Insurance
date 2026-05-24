@@ -35,7 +35,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Only editors can create, edit, delete
-Route::middleware(['auth', 'role:editor'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('cars/create', [CarController::class, 'create'])->name('cars.create');
     Route::post('cars', [CarController::class, 'store'])->name('cars.store');
     Route::get('cars/{car}/edit', [CarController::class, 'edit'])->name('cars.edit');

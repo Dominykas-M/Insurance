@@ -17,11 +17,20 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    public function owners()
+    {
+        return $this->hasMany(Owner::class);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isViewer(): bool
+    {
+        return $this->role === 'viewer';
+    }
     protected function casts(): array
     {
         return [
