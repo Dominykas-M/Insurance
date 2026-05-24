@@ -25,4 +25,7 @@ return [
     'address_min' => 'Address must be at least 5 characters.',
     'owner_added' => 'Owner added successfully.',
     'owner_updated' => 'Owner updated successfully.',
+    'photo_image'   => 'The file must be an image (jpeg, png, jpg, webp).',
+    'photo_max'     => 'The photo may not be larger than 5 MB.',
+    'photo_deleted' => 'Photo deleted successfully.',
 ];

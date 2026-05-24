@@ -26,4 +26,7 @@ return [
     'address_min' => 'Adresas turi būti bent 5 simbolių.',
     'owner_added' => 'Savininkas sėkmingai pridėtas.',
     'owner_updated' => 'Savininkas sėkmingai atnaujintas.',
+    'photo_image'   => 'Failas turi būti paveikslėlis (jpeg, png, jpg, webp).',
+    'photo_max'     => 'Nuotrauka negali viršyti 5 MB.',
+    'photo_deleted' => 'Nuotrauka sėkmingai ištrinta.',
 ];

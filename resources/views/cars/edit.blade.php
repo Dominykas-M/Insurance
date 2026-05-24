@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-header">✏️ {{ __('messages.edit_car') }}</div>
                     <div class="card-body p-4">
-                        <form action="{{ route('cars.update', $car->id) }}" method="POST">
+                        <form action="{{ route('cars.update', $car->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             @if($errors->any())
@@ -41,11 +41,50 @@
                                     @endforeach
                                 </select>
                             </div>
+
+                            {{-- Nuotraukų įkėlimas --}}
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Pridėti nuotraukas</label>
+                                <input type="file" name="photos[]" class="form-control" multiple accept="image/*">
+                                <small class="text-muted">Galite pasirinkti kelias nuotraukas vienu metu.</small>
+                            </div>
+
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-primary">{{ __('messages.update') }}</button>
                                 <a href="{{ route('cars.index') }}" class="btn btn-secondary">{{ __('messages.cancel') }}</a>
                             </div>
                         </form>
+
+                        {{-- Esamos nuotraukos (už formos ribų, kad formos nesidubliuotų) --}}
+                        <hr class="my-4">
+                        @if($car->photos->count() > 0)
+                            <h5 class="mb-3">Automobilio nuotraukos</h5>
+                            <div class="row g-3">
+                                @foreach($car->photos as $photo)
+                                    <div class="col-6 col-md-4">
+                                        <div class="card h-100 shadow-sm">
+                                            <img src="{{ asset('storage/' . $photo->path) }}"
+                                                 class="card-img-top"
+                                                 style="height:140px; object-fit:cover;"
+                                                 alt="Automobilio nuotrauka">
+                                            <div class="card-body p-2 text-center">
+                                                <form action="{{ route('cars.photos.destroy', $photo) }}"
+                                                      method="POST"
+                                                      onsubmit="return confirm('Ar tikrai norite ištrinti šią nuotrauką?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger w-100">
+                                                        🗑️ Ištrinti
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <p class="text-muted mb-0">Šis automobilis dar neturi nuotraukų.</p>
+                        @endif
                     </div>
                 </div>
             </div>
